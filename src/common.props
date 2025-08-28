@@ -1,0 +1,102 @@
+<Project>
+
+  <PropertyGroup>
+    <Authors>Wesley Baartman</Authors>
+    <Copyright>Copyright © Wesley Baartman 2025-current</Copyright>
+    <RepositoryUrl>https://github.com/CptWesley/EmojiNet</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>$(RepositoryUrl)</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageIconUrl>https://github.com/CptWesley/EmojiNet/blob/master/logo_128x128.png?raw=true</PackageIconUrl>
+    <PackageIcon>logo_128x128.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <ReportAnalyzer>true</ReportAnalyzer>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Version>0.1.0</Version>
+    <Description>Contains various databases for emoji shortcodes (based on the emojibase-data npm package). </Description>
+    <PackageTags>emoji; emojis; emojibase</PackageTags>
+    <PackageReleaseNotes>
+      <![CDATA[
+        ### V0.1.0
+        - Initial version.
+      ]]>
+    </PackageReleaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../../logo_128x128.png" Pack="true" Visible="false" PackagePath="" />
+    <None Include="../../README.md" Pack="true" Visible="false" PackagePath="" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <LangVersion>preview</LangVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NuGetAudit>true</NuGetAudit>
+    <NuGetAuditMode>all</NuGetAuditMode>
+    <NuGetAuditLevel>low</NuGetAuditLevel>
+    <DebugType>full</DebugType>
+    <IsPublishable>false</IsPublishable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>false</IsTestProject>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(ContinuousIntegrationBuild)' == 'true'">
+    <RestoreLockedMode>true</RestoreLockedMode>
+  </PropertyGroup>
+
+  <ItemGroup Label="Analyzers">
+    <PackageReference Include="AsyncFixer" PrivateAssets="all" ExcludeAssets="compile" />
+    <PackageReference Include="DotNet.ReproducibleBuilds" PrivateAssets="all" ExcludeAssets="compile" />
+    <PackageReference Include="DotNetProjectFile.Analyzers" PrivateAssets="all" ExcludeAssets="compile" />
+    <PackageReference Include="IDisposableAnalyzers" PrivateAssets="all" ExcludeAssets="compile" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" PrivateAssets="all" ExcludeAssets="compile" />
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" PrivateAssets="all" ExcludeAssets="compile" />
+    <PackageReference Include="Qowaiv.Analyzers.CSharp" PrivateAssets="all" ExcludeAssets="compile" />
+    <PackageReference Include="SonarAnalyzer.CSharp" PrivateAssets="all" ExcludeAssets="compile" />
+    <PackageReference Include="StyleCop.Analyzers" PrivateAssets="all" ExcludeAssets="compile" />
+  </ItemGroup>
+
+  <ItemGroup Label="CodeGenerators">
+    <PackageReference Include="PolySharp" PrivateAssets="all" ExcludeAssets="compile" />
+    <PackageReference Include="Qowaiv.Diagnostics.Contracts" PrivateAssets="all" ExcludeAssets="compile" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="*.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Label="ProjectFiles">
+    <AdditionalFiles Include="*.??proj" Visible="false" />
+    <AdditionalFiles Include="../*.props" Visible="false" />
+  </ItemGroup>
+
+  <ItemGroup Label="DefaultImports">
+    <Using Include="System" />
+    <Using Include="System.Collections" />
+    <Using Include="System.Collections.Concurrent" />
+    <Using Include="System.Collections.Generic" />
+    <Using Include="System.ComponentModel" />
+    <Using Include="System.Diagnostics" />
+    <Using Include="System.Diagnostics.CodeAnalysis" />
+    <Using Include="System.Diagnostics.Contracts" />
+    <Using Include="System.Globalization" />
+    <Using Include="System.IO" />
+    <Using Include="System.Linq" />
+    <Using Include="System.Reflection" />
+    <Using Include="System.Runtime.CompilerServices" />
+    <Using Include="System.Runtime.InteropServices" />
+    <Using Include="System.Text" />
+    <Using Include="System.Text.RegularExpressions" />
+    <Using Include="System.Threading" />
+    <Using Include="System.Threading.Tasks" />
+  </ItemGroup>
+
+</Project>

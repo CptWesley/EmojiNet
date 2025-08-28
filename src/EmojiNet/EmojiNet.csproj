@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../library.props" />
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources/**" />
+  </ItemGroup>
+
+</Project>
