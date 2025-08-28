@@ -3,8 +3,8 @@
   <Import Project="../tests.props" />
 
   <ItemGroup>
-    <Compile Remove="Helpers/snapshots/**/*.cs" />
-    <None Include="Helpers/snapshots/**/*.cs" />
+    <Compile Remove="Snapshots/**" />
+    <None Include="Snapshots/**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -14,6 +14,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EmojiNet.SourceGenerator\EmojiNet.SourceGenerator.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Snapshots\" />
   </ItemGroup>
 
 </Project>

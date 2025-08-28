@@ -26,7 +26,7 @@ public static class GeneratorSnapshot
             ? Directory.GetCurrentDirectory()
             : Path.GetDirectoryName(path) ?? Directory.GetCurrentDirectory();
 
-        var outputDir = Path.Combine(curDir, "snapshots");
+        var outputDir = Path.Combine(curDir, "../Snapshots");
         Directory.CreateDirectory(outputDir);
         return outputDir;
     }

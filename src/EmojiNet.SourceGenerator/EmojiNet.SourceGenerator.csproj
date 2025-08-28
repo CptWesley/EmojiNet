@@ -2,4 +2,8 @@
 
   <Import Project="../sourcegenerator.props" />
 
+  <ItemGroup>
+    <EmbeddedResource Include="Resources/**" />
+  </ItemGroup>
+
 </Project>
