@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../library.props" />
+
+  <ItemGroup>
+    <ProjectReference Include="../EmojiNet.SourceGenerator/EmojiNet.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+</Project>

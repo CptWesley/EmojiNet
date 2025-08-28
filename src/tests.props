@@ -1,0 +1,43 @@
+<Project>
+  <Import Project="executable.props" />
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <IsTestProject>true</IsTestProject>
+    <CollectCoverage>true</CollectCoverage>
+    <CoverletOutputFormat>opencover</CoverletOutputFormat>
+    <CoverletOutput>./bin/</CoverletOutput>
+    <Include>[GameZonderNaam]*</Include>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <NoWarn>SA1600,CS1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup Label="Analyzers">
+    <PackageReference Include="AwesomeAssertions.Analyzers" PrivateAssets="all" ExcludeAssets="compile" />
+    <PackageReference Include="xunit.analyzers" PrivateAssets="all" ExcludeAssets="compile" />
+  </ItemGroup>
+
+  <ItemGroup Label="Dependencies">
+    <PackageReference Include="AwesomeAssertions" />
+    <PackageReference Include="Verify" />
+    <PackageReference Include="Verify.Xunit" />
+    <PackageReference Include="xunit" />
+  </ItemGroup>
+
+  <ItemGroup Label="Build dependencies">
+    <PackageReference Include="coverlet.collector" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.TestPlatform.TestHost" PrivateAssets="all" />
+    <PackageReference Include="xunit.runner.visualstudio" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup Label="DefaultImports">
+    <Using Include="AwesomeAssertions" />
+    <Using Include="VerifyTests" />
+    <Using Include="VerifyXunit" />
+    <Using Include="Xunit" />
+    <Using Include="Xunit.Abstractions" />
+  </ItemGroup>
+</Project>
