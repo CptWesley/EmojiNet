@@ -11,7 +11,7 @@ public static partial class Program
     private const string Repository = "emojibase";
     private const string Branch = "master";
 
-    [GeneratedRegex(@"packages\/data\/(?<lang>\w+)\/shortcodes\/(?<source>\w+).raw.json", RegexOptions.Compiled | RegexOptions.ExplicitCapture)]
+    [GeneratedRegex(@"packages\/data\/(?<lang>[\w\-]+)\/shortcodes\/(?<source>[\w\-]+).raw.json", RegexOptions.Compiled | RegexOptions.ExplicitCapture)]
     private static partial Regex FileNameRegex { get; }
 
     /// <summary>
