@@ -5,7 +5,7 @@ namespace EmojiNet;
 /// </summary>
 public sealed class Emoji : IEquatable<Emoji>, IComparable<Emoji>
 {
-    private static int typeHashcode = 95679037;
+    private static readonly int typeHashcode = 95679037;
 
     private readonly string str;
     private readonly int hashcode;
