@@ -2,4 +2,8 @@
 
   <Import Project="../tests.props" />
 
+  <ItemGroup>
+    <ProjectReference Include="..\EmojiNet\EmojiNet.csproj" />
+  </ItemGroup>
+
 </Project>

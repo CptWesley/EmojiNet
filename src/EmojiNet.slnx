@@ -1,8 +1,6 @@
 <Solution>
   <Folder Name="/Projects/">
     <Project Path="EmojiNet.EmojibaseDownloader/EmojiNet.EmojibaseDownloader.csproj" Id="bb3c503a-c473-412c-afdd-6e145fcfa4e5" />
-    <Project Path="EmojiNet.SourceGenerator.Tests/EmojiNet.SourceGenerator.Tests.csproj" Id="4b08c589-eba1-452c-b06e-4855332d1e76" />
-    <Project Path="EmojiNet.SourceGenerator/EmojiNet.SourceGenerator.csproj" Id="fc00554a-d7e5-436d-971e-fff02b40ed64" />
     <Project Path="EmojiNet.Tests/EmojiNet.Tests.csproj" Id="256c36f4-76b6-4a2e-b833-c75e4997c239" />
     <Project Path="EmojiNet/EmojiNet.csproj" />
   </Folder>

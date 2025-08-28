@@ -19,7 +19,9 @@ public static partial class Program
     /// </summary>
     /// <param name="args">The arguments of the application.</param>
     /// <returns>The task executing the application.</returns>
+#pragma warning disable S3776 // Cognitive Complexity of methods should not be too high
     public static async Task Main(params string[] args)
+#pragma warning restore S3776 // Cognitive Complexity of methods should not be too high
     {
         var outputDir = GetOutputPath();
 
@@ -93,7 +95,7 @@ public static partial class Program
             ? Directory.GetCurrentDirectory()
             : Path.GetDirectoryName(path) ?? Directory.GetCurrentDirectory();
 
-        var outputDir = Path.GetFullPath(Path.Combine(curDir, "../EmojiNet.SourceGenerator/Resources/Shortcodes"));
+        var outputDir = Path.GetFullPath(Path.Combine(curDir, "../EmojiNet/Resources/Shortcodes"));
 
         if (Directory.Exists(outputDir))
         {
