@@ -1,113 +1,54 @@
 namespace EmojiNet;
 
 /// <summary>
-/// Contains various databases of emoji shortcodes.
+/// Represents the shortcodes information of an <see cref="Emoji"/>.
 /// </summary>
-public static partial class EmojiShortcodes
+public sealed class EmojiShortcodes
 {
-    private const string ResourceNameRegexPattern = @"EmojiNet\.Resources\.Shortcodes\.(?<lang>[\w\-]+)\.(?<source>[\w\-]+)\.json";
-
-    private static readonly Lazy<IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyDictionary<IReadOnlyList<int>, IReadOnlyList<string>>>>> perLanguage;
-    private static readonly Lazy<IReadOnlyList<string>> languages;
-    private static readonly Lazy<IReadOnlyList<string>> databases;
-
-#pragma warning disable S3776 // Cognitive Complexity of methods should not be too high
-#pragma warning disable S3963 // "static" fields should be initialized inline
-    static EmojiShortcodes()
-#pragma warning restore S3963 // "static" fields should be initialized inline
-#pragma warning restore S3776 // Cognitive Complexity of methods should not be too high
+    /// <summary>
+    /// Initializes a new instance of the <see cref="EmojiShortcodes"/> class.
+    /// </summary>
+    /// <param name="emoji">The emoji to create the list for.</param>
+    internal EmojiShortcodes(Emoji emoji)
     {
-        perLanguage = new(() =>
+        Emoji = emoji;
+
+        var langs = EmojiShortcodesDatabase.LanguageNames;
+        var dbs = EmojiShortcodesDatabase.DatabaseNames;
+
+        var byLang = new Dictionary<string, Dictionary<string, IReadOnlyList<string>>>();
+        var byDb = new Dictionary<string, Dictionary<string, IReadOnlyList<string>>>();
+
+        foreach (var lang in langs)
         {
-            var asm = typeof(EmojiShortcodes).Assembly;
-            var resourceNames = asm.GetManifestResourceNames();
+            byLang[lang] = new Dictionary<string, IReadOnlyList<string>>();
+        }
 
-            var result = new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyDictionary<IReadOnlyList<int>, IReadOnlyList<string>>>>();
+        foreach (var db in dbs)
+        {
+            byDb[db] = new Dictionary<string, IReadOnlyList<string>>();
+        }
 
-            foreach (var resourceName in resourceNames)
-            {
-                var match = ResourceNameRegex.Match(resourceName);
-
-                if (!match.Success)
-                {
-                    continue;
-                }
-
-                var lang = match.Groups["lang"].Value.Trim();
-                var source = match.Groups["source"].Value.Trim();
-
-                if (!result.TryGetValue(lang, out var langData))
-                {
-                    langData = new Dictionary<string, IReadOnlyDictionary<IReadOnlyList<int>, IReadOnlyList<string>>>();
-                    result[lang] = langData;
-                }
-
-                var sourceData = new Dictionary<IReadOnlyList<int>, IReadOnlyList<string>>();
-
-                using var stream = asm.GetManifestResourceStream(resourceName);
-                using var reader = new StreamReader(stream!);
-
-                while (reader.ReadLine() is { } line)
-                {
-                    var trimmed = line.Trim();
-                    var columns = trimmed.Split(['\t'], StringSplitOptions.RemoveEmptyEntries);
-
-                    if (columns.Length <= 1)
-                    {
-                        continue;
-                    }
-
-                    var codepointsAsString = columns[0];
-                    var codepoints = codepointsAsString
-                        .Split(['-'], StringSplitOptions.RemoveEmptyEntries)
-                        .Select(static hex => int.Parse(hex, NumberStyles.HexNumber))
-                        .ToArray()
-                        .AsReadOnly();
-                    var values = new string[columns.Length - 1];
-                    Array.Copy(columns, 1, values, 0, values.Length);
-
-                    sourceData[codepoints] = values.AsReadOnly();
-                }
-
-                ((Dictionary<string, IReadOnlyDictionary<IReadOnlyList<int>, IReadOnlyList<string>>>)langData)[source] = sourceData.AsReadOnly();
-            }
-
-            foreach (var langEntry in result)
-            {
-                var lang = langEntry.Key;
-                var langData = (Dictionary<string, IReadOnlyDictionary<IReadOnlyList<int>, IReadOnlyList<string>>>)langEntry.Value;
-
-                result[lang] = langData.AsReadOnly();
-            }
-
-            return result.AsReadOnly();
-        });
-
-        languages = new(() => perLanguage.Value.Keys.OrderBy(static x => x).ToArray().AsReadOnly());
-        databases = new(() => perLanguage.Value.Values.SelectMany(static x => x.Keys).Distinct().OrderBy(static x => x).ToArray().AsReadOnly());
+        ByLanguageThenByDatabase = byLang.AsReadOnly(
+            static x => x.Key,
+            static x => x.Value.AsReadOnly());
+        ByDatabaseThenByLanguage = byDb.AsReadOnly(
+            static x => x.Key,
+            static x => x.Value.AsReadOnly());
     }
 
     /// <summary>
-    /// Gets the data in a per-language-per-database way.
+    /// The emoji that corresponds with this set of shortcodes.
     /// </summary>
-    public static IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyDictionary<IReadOnlyList<int>, IReadOnlyList<string>>>> PerLanguage => perLanguage.Value;
+    public Emoji Emoji { get; }
 
     /// <summary>
-    /// Gets the names of all the available languages.
+    /// Accesses the shortcodes on a by-language-then-by-database fashion.
     /// </summary>
-    public static IReadOnlyList<string> LanguageNames => languages.Value;
+    public IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<string>>> ByLanguageThenByDatabase { get; }
 
     /// <summary>
-    /// Gets the names of all the available databases.
+    /// Accesses the shortcodes on a by-database-then-by-language fashion.
     /// </summary>
-    public static IReadOnlyList<string> DatabaseNames => databases.Value;
-
-#if NET7_0_OR_GREATER
-    [GeneratedRegex(ResourceNameRegexPattern, RegexOptions.Compiled | RegexOptions.ExplicitCapture)]
-    private static partial Regex CreateResourceNameRegex();
-
-    private static Regex ResourceNameRegex { get; } = CreateResourceNameRegex();
-#else
-    private static Regex ResourceNameRegex { get; } = new Regex(ResourceNameRegexPattern, RegexOptions.Compiled | RegexOptions.ExplicitCapture);
-#endif
+    public IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyList<string>>> ByDatabaseThenByLanguage { get; }
 }

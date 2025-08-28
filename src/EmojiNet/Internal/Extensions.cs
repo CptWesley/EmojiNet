@@ -22,6 +22,20 @@ internal static class Extensions
 #endif
         }
 
+    /// <inheritdoc cref="AsReadOnly{TKey, TValue}(Dictionary{TKey, TValue})" />
+    public static IReadOnlyDictionary<TKey, TValue> AsReadOnly<TSource, TKey, TValue>(
+        this IEnumerable<TSource> dictionary,
+        Func<TSource, TKey> keySelector,
+        Func<TSource, TValue> valueSelector)
+        where TKey : notnull
+    {
+#if NET8_0_OR_GREATER
+            return System.Collections.Frozen.FrozenDictionary.ToFrozenDictionary(dictionary, keySelector, valueSelector);
+#else
+        return new System.Collections.ObjectModel.ReadOnlyDictionary<TKey, TValue>(dictionary.ToDictionary(keySelector, valueSelector));
+#endif
+    }
+
     /// <summary>
     /// Converts the given <paramref name="array"/> to a read-only variant.
     /// </summary>

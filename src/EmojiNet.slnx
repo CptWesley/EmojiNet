@@ -6,6 +6,7 @@
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path="../.gitignore" />
+    <File Path="../README.md" />
     <File Path=".editorconfig" />
     <File Path=".globalconfig" />
   </Folder>

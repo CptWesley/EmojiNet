@@ -1,3 +1,5 @@
+using EmojiNet.Internal;
+
 namespace EmojiNet.Tests;
 
 public static class SimpleTests
@@ -5,9 +7,9 @@ public static class SimpleTests
     [Fact]
     public static void HasAnyData()
     {
-        EmojiShortcodes.PerLanguage.Should().NotBeEmpty();
+        EmojiShortcodesDatabase.PerLanguage.Should().NotBeEmpty();
 
-        foreach (var perLanguageEntry in EmojiShortcodes.PerLanguage)
+        foreach (var perLanguageEntry in EmojiShortcodesDatabase.PerLanguage)
         {
             perLanguageEntry.Key.Should().NotBeNullOrWhiteSpace();
             perLanguageEntry.Value.Should().NotBeEmpty();
@@ -28,7 +30,7 @@ public static class SimpleTests
 
     [Fact]
     public static void HasAllLanguages()
-        => EmojiShortcodes.LanguageNames.Should()
+        => EmojiShortcodesDatabase.LanguageNames.Should()
         .BeEquivalentTo(
             "bn",
             "da",
@@ -61,7 +63,7 @@ public static class SimpleTests
 
     [Fact]
     public static void HasAllDatabases()
-        => EmojiShortcodes.DatabaseNames.Should()
+        => EmojiShortcodesDatabase.DatabaseNames.Should()
         .BeEquivalentTo(
             "cldr",
             "cldr-native",
@@ -71,4 +73,8 @@ public static class SimpleTests
             "github",
             "iamcal",
             "joypixels");
+
+    [Fact]
+    public static void FoundCorrectNumberOfEmojis()
+        => Emojis.All.Should().HaveCount(3816);
 }
