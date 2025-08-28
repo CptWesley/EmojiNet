@@ -12,7 +12,9 @@ public sealed class EmojiShortcodes
     /// Initializes a new instance of the <see cref="EmojiShortcodes"/> class.
     /// </summary>
     /// <param name="emoji">The emoji to create the list for.</param>
+#pragma warning disable S3776 // Cognitive Complexity of methods should not be too high
     internal EmojiShortcodes(Emoji emoji)
+#pragma warning restore S3776 // Cognitive Complexity of methods should not be too high
     {
         Emoji = emoji;
 
@@ -31,6 +33,25 @@ public sealed class EmojiShortcodes
                 foreach (var db in dbs)
                 {
                     byDb[db] = Array.Empty<string>();
+                }
+            }
+
+            foreach (var langEntry in EmojiShortcodesDatabase.PerLanguage)
+            {
+                var lang = langEntry.Key;
+                var langData = langEntry.Value;
+
+                foreach (var dbEntry in langData)
+                {
+                    var db = dbEntry.Key;
+                    var dbData = dbEntry.Value;
+
+                    var entry = dbData.FirstOrDefault(x => x.Key.SequenceEqual(emoji.CodePoints));
+
+                    if (entry.Value?.Count > 0)
+                    {
+                        byLang[lang][db] = entry.Value;
+                    }
                 }
             }
 
@@ -54,6 +75,25 @@ public sealed class EmojiShortcodes
                 foreach (var lang in langs)
                 {
                     byLang[db] = Array.Empty<string>();
+                }
+            }
+
+            foreach (var langEntry in EmojiShortcodesDatabase.PerLanguage)
+            {
+                var lang = langEntry.Key;
+                var langData = langEntry.Value;
+
+                foreach (var dbEntry in langData)
+                {
+                    var db = dbEntry.Key;
+                    var dbData = dbEntry.Value;
+
+                    var entry = dbData.FirstOrDefault(x => x.Key.SequenceEqual(emoji.CodePoints));
+
+                    if (entry.Value?.Count > 0)
+                    {
+                        byDb[db][lang] = entry.Value;
+                    }
                 }
             }
 
