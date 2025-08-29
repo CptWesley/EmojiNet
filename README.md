@@ -1,3 +1,5 @@
+![EmojiNet](https://github.com/CptWesley/EmojiNet/blob/main/logo_128x128.png?raw=true)
+
 # EmojiNet
 Contains various databases for emoji shortcodes (based on the [emojibase-data](https://www.npmjs.com/package/emojibase-data) npm package).
 The actual data is extracted from the [emojibase GitHub repository](https://github.com/milesj/emojibase) under MIT license.

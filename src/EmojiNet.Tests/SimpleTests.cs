@@ -4,6 +4,8 @@ namespace EmojiNet.Tests;
 
 public static class SimpleTests
 {
+    private const int KnownEmojiCount = 3816;
+
     [Fact]
     public static void HasAnyData()
     {
@@ -75,6 +77,39 @@ public static class SimpleTests
             "joypixels");
 
     [Fact]
-    public static void FoundCorrectNumberOfEmojis()
-        => Emojis.All.Should().HaveCount(3816);
+    public static void FoundCorrectNumberOfEmojisInList()
+        => Emojis.All.Should().HaveCount(KnownEmojiCount);
+
+    [Fact]
+    public static void FoundCorrectNumberOfEmojisInLookup()
+        => Emojis.Lookup.Should().HaveCount(KnownEmojiCount);
+
+#pragma warning disable QW0004, S3257
+    [Theory]
+    [InlineData(new string[] { }, new string[] { }, "smile", null)]
+    [InlineData(new string[] { "en" }, new string[] { }, "smile", null)]
+    [InlineData(new string[] { "en" }, new string[] { "cldr" }, "smile", null)]
+    [InlineData(new string[] { "en" }, new string[] { "cldr", "github" }, "smile", "😄")]
+    [InlineData(new string[] { "da" }, new string[] { "cldr", "github" }, "smile", null)]
+    [InlineData(new string[] { "en" }, new string[] { "emojibase-legacy" }, "smile", "😃")]
+    [InlineData(new string[] { "en" }, new string[] { "emojibase" }, "smile", "😄")]
+    [InlineData(new string[] { "en" }, new string[] { "emojibase", "emojibase-legacy" }, "smile", "😄")]
+    [InlineData(new string[] { "en" }, new string[] { "emojibase-legacy", "emojibase" }, "smile", "😃")]
+    public static void SimpleResolver(string[] languages, string[] databases, string shortCode, string? expectedEmoji)
+    {
+        var resolver = Emojis.GetResolver(languages, databases);
+
+        if (expectedEmoji is not null)
+        {
+            resolver.TryGetValue(shortCode, out var foundEmoji).Should().BeTrue();
+            foundEmoji.Should().NotBeNull();
+            foundEmoji.ToString().Should().Be(expectedEmoji);
+        }
+        else
+        {
+            resolver.TryGetValue(shortCode, out var foundEmoji).Should().BeFalse();
+            foundEmoji.Should().BeNull();
+        }
+    }
+#pragma warning restore QW0004, S3257
 }
