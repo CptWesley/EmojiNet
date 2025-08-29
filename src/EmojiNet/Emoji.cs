@@ -29,16 +29,7 @@ public sealed class Emoji : IEquatable<Emoji>, IComparable<Emoji>
         }
 
         str = sb.ToString();
-
-        hashcode = 7706329;
-        hashcode = hashcode * 7362133 ^ codePoints.Count.GetHashCode();
-
-        for (var i = 0; i < codePoints.Count; i++)
-        {
-            hashcode = hashcode * 7362133 ^ (i, codePoints[i]).GetHashCode();
-        }
-
-        hashcode += typeHashcode;
+        hashcode = typeHashcode + str.GetHashCode();
     }
 
     /// <summary>
@@ -81,7 +72,7 @@ public sealed class Emoji : IEquatable<Emoji>, IComparable<Emoji>
             return false;
         }
 
-        return CodePoints.SequenceEqual(other.CodePoints);
+        return str == other.str;
     }
 
     /// <inheritdoc />
