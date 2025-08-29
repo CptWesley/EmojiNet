@@ -38,6 +38,11 @@ public sealed class Emoji : IEquatable<Emoji>, IComparable<Emoji>
     public IReadOnlyList<int> CodePoints { get; }
 
     /// <summary>
+    /// Gets the <see cref="string"/> value of the emoji.
+    /// </summary>
+    public string Value => str;
+
+    /// <summary>
     /// The shortcodes of this emoji.
     /// </summary>
     public EmojiShortcodes Shortcodes => shortcodes.Value;
