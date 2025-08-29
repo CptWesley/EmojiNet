@@ -1,9 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="../tests.props" />
 
   <ItemGroup>
-    <ProjectReference Include="..\EmojiNet\EmojiNet.csproj" />
+    <ProjectReference Include="../EmojiNet/EmojiNet.csproj" />
   </ItemGroup>
 
 </Project>
