@@ -4,7 +4,21 @@
   <PropertyGroup Label="Technical">
     <OutputType>Library</OutputType>
     <TargetFrameworks>netstandard2.0;net7.0;net8.0</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Packaging">
     <IsPackable>true</IsPackable>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Package Validation">
+    <EnablePackageValidation>true</EnablePackageValidation>
+    <EnableStrictModeForBaselineValidation>true</EnableStrictModeForBaselineValidation>
+    <PackageValidationBaselineVersion>0.1.0</PackageValidationBaselineVersion>
+    <ApiCompatEnableRuleAttributesMustMatch>true</ApiCompatEnableRuleAttributesMustMatch>
+    <ApiCompatEnableRuleCannotChangeParameterName>true</ApiCompatEnableRuleCannotChangeParameterName>
+    <EnableStrictModeForCompatibleFrameworksInPackage>true</EnableStrictModeForCompatibleFrameworksInPackage>
+    <ApiCompatGenerateSuppressionFile>true</ApiCompatGenerateSuppressionFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
