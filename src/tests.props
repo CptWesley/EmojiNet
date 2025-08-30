@@ -7,7 +7,7 @@
     <CollectCoverage>true</CollectCoverage>
     <CoverletOutputFormat>opencover</CoverletOutputFormat>
     <CoverletOutput>./bin/</CoverletOutput>
-    <Include>[GameZonderNaam]*</Include>
+    <Include>[EmojiNet]*</Include>
   </PropertyGroup>
 
   <PropertyGroup>
