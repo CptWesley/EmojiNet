@@ -1,3 +1,5 @@
+using System.IO.Compression;
+
 namespace EmojiNet.Internal;
 
 /// <summary>
@@ -5,7 +7,7 @@ namespace EmojiNet.Internal;
 /// </summary>
 internal static partial class EmojiShortcodesDatabase
 {
-    private const string ResourceNameRegexPattern = @"EmojiNet\.Resources\.Shortcodes\.(?<lang>[\w\-]+)\.(?<source>[\w\-]+)\.json";
+    private const string ResourceNameRegexPattern = @"EmojiNet\.Resources\.Shortcodes\.(?<lang>[\w\-]+)\.(?<source>[\w\-]+)\.bin";
 
     private static readonly Lazy<IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyDictionary<IReadOnlyList<int>, IReadOnlyList<string>>>>> perLanguage;
     private static readonly Lazy<IReadOnlyList<string>> languages;
@@ -45,7 +47,8 @@ internal static partial class EmojiShortcodesDatabase
                 var sourceData = new Dictionary<IReadOnlyList<int>, IReadOnlyList<string>>();
 
                 using var stream = asm.GetManifestResourceStream(resourceName);
-                using var reader = new StreamReader(stream!);
+                using var decompressionStream = new GZipStream(stream!, CompressionMode.Decompress);
+                using var reader = new StreamReader(decompressionStream);
 
                 while (reader.ReadLine() is { } line)
                 {

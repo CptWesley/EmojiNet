@@ -14,11 +14,13 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>0.1.0</Version>
+    <Version>0.2.0</Version>
     <Description>Contains various databases for emoji shortcodes (based on the emojibase-data npm package). </Description>
     <PackageTags>emoji; emojis; emojibase</PackageTags>
     <PackageReleaseNotes>
       <![CDATA[
+        ### V0.2.0
+        - Reduced file size.
         ### V0.1.0
         - Initial version.
       ]]>
