@@ -4,7 +4,7 @@
 |-------------------|--------|---------|-----------|
 | [EmojiNet](https://www.nuget.org/packages/EmojiNet) | [![NuGet](https://img.shields.io/nuget/v/EmojiNet.svg)](https://www.nuget.org/packages/EmojiNet) | [![NuGet](https://img.shields.io/nuget/vpre/EmojiNet.svg)](https://www.nuget.org/packages/EmojiNet/absoluteLatest) | [![NuGet](https://img.shields.io/nuget/dt/EmojiNet.svg)](https://www.nuget.org/packages/EmojiNet) |
 
-[![EmojiNet](https://github.com/CptWesley/EmojiNet/blob/main/logo_128x128.png?raw=true)](https://github.com/CptWesley/EmojiNet)
+[![EmojiNet](https://raw.githubusercontent.com/CptWesley/EmojiNet/main/logo_128x128.png)](https://github.com/CptWesley/EmojiNet)
 
 # EmojiNet
 Contains various databases for emoji shortcodes (based on the [emojibase-data](https://www.npmjs.com/package/emojibase-data) npm package).
