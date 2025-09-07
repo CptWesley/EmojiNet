@@ -7,22 +7,28 @@
     <RepositoryType>git</RepositoryType>
     <PackageProjectUrl>$(RepositoryUrl)</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageIconUrl>https://github.com/CptWesley/EmojiNet/blob/master/logo_128x128.png?raw=true</PackageIconUrl>
+    <PackageIconUrl>https://github.com/CptWesley/EmojiNet/blob/main/logo_128x128.png?raw=true</PackageIconUrl>
     <PackageIcon>logo_128x128.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <ReportAnalyzer>true</ReportAnalyzer>
+    <ProductName>$(AssemblyName)</ProductName>
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>0.2.0</Version>
+    <Version>0.3.0</Version>
     <Description>Contains various databases for emoji shortcodes (based on the emojibase-data npm package). </Description>
     <PackageTags>emoji; emojis; emojibase</PackageTags>
     <PackageReleaseNotes>
       <![CDATA[
-        ### V0.2.0
-        - Reduced file size.
-        ### V0.1.0
-        - Initial version.
+### V0.3.0
+- Reduced DLL file size from 7.5 MB to 1.5 MB.
+### V0.2.0
+- Included SBOM.
+- Included debug information.
+- Included sourcelink support.
+- Fix icon URL.
+### V0.1.0
+- Initial version.
       ]]>
     </PackageReleaseNotes>
   </PropertyGroup>
@@ -42,12 +48,15 @@
     <NuGetAudit>true</NuGetAudit>
     <NuGetAuditMode>all</NuGetAuditMode>
     <NuGetAuditLevel>low</NuGetAuditLevel>
-    <DebugType>full</DebugType>
+    <DebugType>embedded</DebugType>
     <IsPublishable>false</IsPublishable>
     <IsPackable>false</IsPackable>
     <IsTestProject>false</IsTestProject>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <GenerateSBOM>true</GenerateSBOM>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(ContinuousIntegrationBuild)' == 'true'">
@@ -69,6 +78,11 @@
   <ItemGroup Label="CodeGenerators">
     <PackageReference Include="PolySharp" PrivateAssets="all" ExcludeAssets="compile" />
     <PackageReference Include="Qowaiv.Diagnostics.Contracts" PrivateAssets="all" ExcludeAssets="compile" />
+  </ItemGroup>
+
+  <ItemGroup Label="Compilation">
+    <PackageReference Include="Microsoft.Sbom.Targets" PrivateAssets="all" ExcludeAssets="compile" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="all" ExcludeAssets="compile" />
   </ItemGroup>
 
   <ItemGroup>
