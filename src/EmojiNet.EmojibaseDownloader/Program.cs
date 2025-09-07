@@ -1,3 +1,4 @@
+using System.IO.Compression;
 using System.Text.Json;
 
 namespace EmojiNet.EmojibaseDownloader;
@@ -46,11 +47,12 @@ public static partial class Program
             var content = await FileDownloader.DownloadAsStringAsync(url);
             Console.WriteLine($"Finished downloading '{url}'.");
 
-            var filePath = Path.Combine(outputDir, $"{lang}.{source}.json");
+            var filePath = Path.Combine(outputDir, $"{lang}.{source}.bin");
             Console.WriteLine($"Writing to file '{filePath}'...");
 
             using var fileStream = File.OpenWrite(filePath);
-            using var writer = new StreamWriter(fileStream);
+            using var compressionStream = new GZipStream(fileStream, CompressionLevel.SmallestSize);
+            using var writer = new StreamWriter(compressionStream);
             using var doc = JsonDocument.Parse(content).RootElement.EnumerateObject();
 
             foreach (var prop in doc)

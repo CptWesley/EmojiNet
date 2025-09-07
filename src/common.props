@@ -15,18 +15,20 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>0.2.0</Version>
+    <Version>0.3.0</Version>
     <Description>Contains various databases for emoji shortcodes (based on the emojibase-data npm package). </Description>
     <PackageTags>emoji; emojis; emojibase</PackageTags>
     <PackageReleaseNotes>
       <![CDATA[
-        ### V0.2.0
-        - Included SBOM.
-        - Included debug information.
-        - Included sourcelink support.
-        - Fix icon URL.
-        ### V0.1.0
-        - Initial version.
+### V0.3.0
+- Reduced DLL file size from 7.5 MB to 1.5 MB.
+### V0.2.0
+- Included SBOM.
+- Included debug information.
+- Included sourcelink support.
+- Fix icon URL.
+### V0.1.0
+- Initial version.
       ]]>
     </PackageReleaseNotes>
   </PropertyGroup>
