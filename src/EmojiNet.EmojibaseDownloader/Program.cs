@@ -25,8 +25,20 @@ public static partial class Program
 #pragma warning restore S3776 // Cognitive Complexity of methods should not be too high
     {
         var outputDir = GetOutputPath();
+        var gzipFilePath = Path.Combine(outputDir, "gzip.bin");
+        var brotliFilePath = Path.Combine(outputDir, "brotli.bin");
 
         var tree = await GitRepositoryDownloader.GetTreeAsync(Organization, Repository, Branch);
+
+        using var gzipFileStream = File.OpenWrite(gzipFilePath);
+        using var gzipCompressionStream = new GZipStream(gzipFileStream, CompressionLevel.SmallestSize);
+        using var gzipWriter = new StreamWriter(gzipCompressionStream);
+
+        using var brotliFileStream = File.OpenWrite(brotliFilePath);
+        using var brotliCompressionStream = new BrotliStream(brotliFileStream, CompressionLevel.SmallestSize);
+        using var brotliWriter = new StreamWriter(brotliCompressionStream);
+        Console.WriteLine($"Writing to file '{gzipFilePath}'...");
+        Console.WriteLine($"Writing to file '{brotliFilePath}'...");
 
         Console.WriteLine("Starting to download all data...");
 
@@ -47,12 +59,8 @@ public static partial class Program
             var content = await FileDownloader.DownloadAsStringAsync(url);
             Console.WriteLine($"Finished downloading '{url}'.");
 
-            var filePath = Path.Combine(outputDir, $"{lang}.{source}.bin");
-            Console.WriteLine($"Writing to file '{filePath}'...");
-
-            using var fileStream = File.OpenWrite(filePath);
-            using var compressionStream = new GZipStream(fileStream, CompressionLevel.SmallestSize);
-            using var writer = new StreamWriter(compressionStream);
+            await gzipWriter.WriteLineAsync($"=\t{lang}\t{source}");
+            await brotliWriter.WriteLineAsync($"=\t{lang}\t{source}");
             using var doc = JsonDocument.Parse(content).RootElement.EnumerateObject();
 
             foreach (var prop in doc)
@@ -82,13 +90,24 @@ public static partial class Program
                     }
                 }
 
-                await writer.WriteLineAsync($"{name}\t{string.Join('\t', valueList)}");
+                await gzipWriter.WriteLineAsync($"{name}\t{string.Join('\t', valueList)}");
+                await brotliWriter.WriteLineAsync($"{name}\t{string.Join('\t', valueList)}");
             }
-
-            Console.WriteLine($"Finished writing to file '{filePath}'.");
         }
 
         Console.WriteLine("Finished downloading all data.");
+
+        await gzipWriter.FlushAsync();
+        await gzipCompressionStream.FlushAsync();
+        await gzipFileStream.FlushAsync();
+
+        Console.WriteLine($"Finished writing to file '{gzipFilePath}'.");
+
+        await brotliWriter.FlushAsync();
+        await brotliCompressionStream.FlushAsync();
+        await brotliFileStream.FlushAsync();
+
+        Console.WriteLine($"Finished writing to file '{brotliFilePath}'.");
     }
 
     private static string GetOutputPath([CallerFilePath] string? path = null)

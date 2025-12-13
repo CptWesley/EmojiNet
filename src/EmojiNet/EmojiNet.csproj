@@ -2,8 +2,17 @@
 
   <Import Project="../library.props" />
 
-  <ItemGroup>
-    <EmbeddedResource Include="Resources/**" />
+  <PropertyGroup>
+    <GzipFrameworks>|netstandard2.0|</GzipFrameworks>
+    <BrotliFrameworks>|netstandard2.1|net8.0|</BrotliFrameworks>
+  </PropertyGroup>
+
+  <ItemGroup Condition="$(GzipFrameworks.Contains('|$(TargetFramework)|'))">
+    <EmbeddedResource Include="Resources/Shortcodes/gzip.bin" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$(BrotliFrameworks.Contains('|$(TargetFramework)|'))">
+    <EmbeddedResource Include="Resources/Shortcodes/brotli.bin" />
   </ItemGroup>
 
 </Project>
