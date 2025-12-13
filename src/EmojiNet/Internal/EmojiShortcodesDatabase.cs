@@ -7,8 +7,6 @@ namespace EmojiNet.Internal;
 /// </summary>
 internal static partial class EmojiShortcodesDatabase
 {
-    private const string ResourceNameRegexPattern = @"EmojiNet\.Resources\.Shortcodes\.(?<lang>[\w\-]+)\.(?<source>[\w\-]+)\.bin";
-
     private static readonly Lazy<IReadOnlyDictionary<string, IReadOnlyDictionary<string, IReadOnlyDictionary<IReadOnlyList<int>, IReadOnlyList<string>>>>> perLanguage;
     private static readonly Lazy<IReadOnlyList<string>> languages;
     private static readonly Lazy<IReadOnlyList<string>> databases;
@@ -22,68 +20,79 @@ internal static partial class EmojiShortcodesDatabase
         perLanguage = new(() =>
         {
             var asm = typeof(EmojiShortcodesDatabase).Assembly;
-            var resourceNames = asm.GetManifestResourceNames();
+#if NETSTANDARD2_1_OR_GREATER || NET8_0_OR_GREATER
+            var resourceName = "EmojiNet.Resources.Shortcodes.brotli.bin";
+#else
+            var resourceName = "EmojiNet.Resources.Shortcodes.gzip.bin";
+#endif
 
-            var result = new Dictionary<string, IReadOnlyDictionary<string, IReadOnlyDictionary<IReadOnlyList<int>, IReadOnlyList<string>>>>();
+            using var stream = asm.GetManifestResourceStream(resourceName);
+#if NETSTANDARD2_1_OR_GREATER || NET8_0_OR_GREATER
+            using var decompressionStream = new BrotliStream(stream!, CompressionMode.Decompress);
+#else
+            using var decompressionStream = new GZipStream(stream!, CompressionMode.Decompress);
+#endif
+            using var reader = new StreamReader(decompressionStream);
 
-            foreach (var resourceName in resourceNames)
+            var builder = new Dictionary<string, Dictionary<string, Dictionary<IReadOnlyList<int>, IReadOnlyList<string>>>>();
+            Dictionary<IReadOnlyList<int>, IReadOnlyList<string>>? data = null;
+
+            while (reader.ReadLine() is { } line)
             {
-                var match = ResourceNameRegex.Match(resourceName);
+                var trimmed = line.Trim();
+                var columns = trimmed.Split(['\t'], StringSplitOptions.RemoveEmptyEntries);
 
-                if (!match.Success)
+                if (columns.Length <= 1)
                 {
                     continue;
                 }
 
-                var lang = match.Groups["lang"].Value.Trim();
-                var source = match.Groups["source"].Value.Trim();
-
-                if (!result.TryGetValue(lang, out var langData))
+                if (columns.Length == 3 && columns[0] == "=")
                 {
-                    langData = new Dictionary<string, IReadOnlyDictionary<IReadOnlyList<int>, IReadOnlyList<string>>>();
-                    result[lang] = langData;
-                }
+                    var lang = columns[1];
+                    var source = columns[2];
 
-                var sourceData = new Dictionary<IReadOnlyList<int>, IReadOnlyList<string>>();
-
-                using var stream = asm.GetManifestResourceStream(resourceName);
-                using var decompressionStream = new GZipStream(stream!, CompressionMode.Decompress);
-                using var reader = new StreamReader(decompressionStream);
-
-                while (reader.ReadLine() is { } line)
-                {
-                    var trimmed = line.Trim();
-                    var columns = trimmed.Split(['\t'], StringSplitOptions.RemoveEmptyEntries);
-
-                    if (columns.Length <= 1)
+                    if (!builder.TryGetValue(lang, out var langData))
                     {
-                        continue;
+                        langData = new();
+                        builder[lang] = langData;
                     }
 
-                    var codepointsAsString = columns[0];
-                    var codepoints = codepointsAsString
-                        .Split(['-'], StringSplitOptions.RemoveEmptyEntries)
-                        .Select(static hex => int.Parse(hex, NumberStyles.HexNumber))
-                        .ToArray()
-                        .AsReadOnly();
-                    var values = new string[columns.Length - 1];
-                    Array.Copy(columns, 1, values, 0, values.Length);
+                    if (!langData.TryGetValue(source, out var sourceData))
+                    {
+                        sourceData = new();
+                        langData[source] = sourceData;
+                    }
 
-                    sourceData[codepoints] = values.AsReadOnly();
+                    data = sourceData;
+                    continue;
+                }
+                else if (data is null)
+                {
+                    continue;
                 }
 
-                ((Dictionary<string, IReadOnlyDictionary<IReadOnlyList<int>, IReadOnlyList<string>>>)langData)[source] = sourceData.AsReadOnly();
+                var codepointsAsString = columns[0];
+                var codepoints = codepointsAsString
+                    .Split(['-'], StringSplitOptions.RemoveEmptyEntries)
+                    .Select(static hex => int.Parse(hex, NumberStyles.HexNumber))
+                    .ToArray()
+                    .AsReadOnly();
+                var values = new string[columns.Length - 1];
+                Array.Copy(columns, 1, values, 0, values.Length);
+
+                data[codepoints] = values.AsReadOnly();
             }
 
-            foreach (var langEntry in result)
-            {
-                var lang = langEntry.Key;
-                var langData = (Dictionary<string, IReadOnlyDictionary<IReadOnlyList<int>, IReadOnlyList<string>>>)langEntry.Value;
+            var result = builder
+                .AsReadOnly(
+                    static x => x.Key,
+                    static x => x.Value
+                        .AsReadOnly(
+                            static x => x.Key,
+                            static x => x.Value.AsReadOnly()));
 
-                result[lang] = langData.AsReadOnly();
-            }
-
-            return result.AsReadOnly();
+            return result;
         });
 
         languages = new(() => perLanguage.Value.Keys.OrderBy(static x => x).ToArray().AsReadOnly());
@@ -104,13 +113,4 @@ internal static partial class EmojiShortcodesDatabase
     /// Gets the names of all the available databases.
     /// </summary>
     public static IReadOnlyList<string> DatabaseNames => databases.Value;
-
-#if NET7_0_OR_GREATER
-    [GeneratedRegex(ResourceNameRegexPattern, RegexOptions.Compiled | RegexOptions.ExplicitCapture)]
-    private static partial Regex CreateResourceNameRegex();
-
-    private static Regex ResourceNameRegex { get; } = CreateResourceNameRegex();
-#else
-    private static Regex ResourceNameRegex { get; } = new Regex(ResourceNameRegexPattern, RegexOptions.Compiled | RegexOptions.ExplicitCapture);
-#endif
 }

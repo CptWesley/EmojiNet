@@ -15,13 +15,14 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>0.3.0</Version>
+    <Version>0.4.0</Version>
     <Description>Contains various databases for emoji shortcodes (based on the emojibase-data npm package). </Description>
     <PackageTags>emoji; emojis; emojibase</PackageTags>
     <PackageReleaseNotes>
       <![CDATA[
 ### V0.4.0
 - Support Emoji 17.
+- Reduced DLL file size from 1.5 MB to 0.8 MB for targets supporting .NET Standard 2.1.
 ### V0.3.0
 - Reduced DLL file size from 7.5 MB to 1.5 MB.
 ### V0.2.0
@@ -78,7 +79,6 @@
   </ItemGroup>
 
   <ItemGroup Label="CodeGenerators">
-    <PackageReference Include="PolySharp" PrivateAssets="all" ExcludeAssets="compile" />
     <PackageReference Include="Qowaiv.Diagnostics.Contracts" PrivateAssets="all" ExcludeAssets="compile" />
   </ItemGroup>
 
