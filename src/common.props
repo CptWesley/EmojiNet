@@ -20,6 +20,8 @@
     <PackageTags>emoji; emojis; emojibase</PackageTags>
     <PackageReleaseNotes>
       <![CDATA[
+### V0.4.0
+- Support Emoji 17.
 ### V0.3.0
 - Reduced DLL file size from 7.5 MB to 1.5 MB.
 ### V0.2.0

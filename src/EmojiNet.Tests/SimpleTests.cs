@@ -4,7 +4,7 @@ namespace EmojiNet.Tests;
 
 public static class SimpleTests
 {
-    private const int KnownEmojiCount = 3816;
+    private const int KnownEmojiCount = 3979;
 
     [Fact]
     public static void HasAnyData()
